@@ -1,1 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PIPPA - Public Interest Patent Policy Assistant</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .pippa-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .pippa-header {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .pippa-title {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .pippa-subtitle {
+            font-size: 1.1em;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        .pippa-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #feca57;
+            color: #2d3436;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+
+        .chat-container {
+            padding: 30px;
+            height: 500px;
+            overflow-y: auto;
+            background: #f8f9fa;
+        }
+
+        .message {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .user-message {
+            justify-content: flex-end;
+        }
+
+        .pippa-message {
+            justify-content: flex-start;
+        }
+
+        .message-bubble {
+            max-width: 70%;
+            padding: 15px 20px;
+            border-radius: 20px;
+            position: relative;
+        }
+
+        .user-bubble {
+            background: #667eea;
+            color: white;
+            border-bottom-right-radius: 5px;
+        }
+
+        .pippa-bubble {
+            background: white;
+            color: #2d3436;
+            border: 2px solid #ffeaa7;
+            border-bottom-left-radius: 5px;
+        }
+
+        .pippa-icon {
+            width: 40px;
+            height: 40px;
+            background: #ff9ff3;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .user-icon {
+            width: 40px;
+            height: 40px;
+            background: #74b9ff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 10px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .input-container {
+            padding: 20px;
+            background: white;
+            border-top: 3px solid #ffeaa7;
+            display: flex;
+            gap: 10px;
+        }
+
+        #messageInput {
+            flex: 1;
+            padding: 15px 20px;
+            border: 2px solid #ddd;
+            border-radius: 25px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        #messageInput:focus {
+            border-color: #667eea;
+        }
+
+        #sendButton {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        #sendButton:hover {
+            background: #ee5a24;
+        }
+
+        .help-card {
+            background: #ffeaa7;
+            padding: 10px 15px;
+            border-radius: 10px;
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #2d3436;
+        }
+
+        .resonance-display {
+            background: #dfe6e9;
+            padding: 10px;
+            border-radius: 10px;
+            margin-top: 10px;
+            font-family: monospace;
+            font-size: 0.8em;
+        }
+
+        .typing-indicator {
+            display: none;
+            padding: 10px;
+            color: #636e72;
+            font-style: italic;
+        }
+
+        .pizza-emoji {
+            font-size: 1.2em;
+            margin: 0 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="pippa-container">
+        <div class="pippa-header">
+            <div class="pippa-badge">🐕‍🦺 PIPPA</div>
+            <div class="pippa-title">PIPPA</div>
+            <div class="pippa-subtitle">Public Interest Patent Policy Assistant</div>
+        </div>
+
+        <div class="chat-container" id="chatContainer">
+            <div class="message pippa-message">
+                <div class="pippa-icon">P</div>
+                <div class="message-bubble pippa-bubble">
+                    <strong>Hello friend! 🐾</strong><br><br>
+                    I'm PIPPA, here to help you navigate patent policy with clarity and compassion. 
+                    Whether you're working on public interest advocacy, research, or just curious 
+                    about how patents serve the public good - I'm here to help!<br><br>
+                    
+                    <div class="help-card">
+                        💡 <strong>Pro tip:</strong> You can include a "help card" with your message 
+                        to guide our conversation (like "explain like I'm 10" or "patent eligibility basics").
+                    </div>
+                    
+                    <div style="margin-top: 10px; text-align: center;">
+                        <span class="pizza-emoji">🍕</span> 
+                        <em>Ready to serve the public interest!</em> 
+                        <span class="pizza-emoji">🍕</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="typing-indicator" id="typingIndicator">
+            PIPPA is thinking...
+        </div>
+
+        <div class="input-container">
+            <input type="text" id="messageInput" placeholder="Knock knock... what's your patent policy question?" />
+            <button id="sendButton">Send</button>
+        </div>
+    </div>
+
+    <script>
+        const chatContainer = document.getElementById('chatContainer');
+        const messageInput = document.getElementById('messageInput');
+        const sendButton = document.getElementById('sendButton');
+        const typingIndicator = document.getElementById('typingIndicator');
+
+        function addMessage(message, isUser = false) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user-message' : 'pippa-message'}`;
+            
+            const iconDiv = document.createElement('div');
+            iconDiv.className = isUser ? 'user-icon' : 'pippa-icon';
+            iconDiv.textContent = isUser ? 'Y' : 'P';
+            
+            const bubbleDiv = document.createElement('div');
+            bubbleDiv.className = `message-bubble ${isUser ? 'user-bubble' : 'pippa-bubble'}`;
+            bubbleDiv.innerHTML = message;
+            
+            if (isUser) {
+                messageDiv.appendChild(bubbleDiv);
+                messageDiv.appendChild(iconDiv);
+            } else {
+                messageDiv.appendChild(iconDiv);
+                messageDiv.appendChild(bubbleDiv);
+            }
+            
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        async function sendMessage() {
+            const message = messageInput.value.trim();
+            if (!message) return;
+
+            // Add user message
+            addMessage(message, true);
+            messageInput.value = '';
+
+            // Show typing indicator
+            typingIndicator.style.display = 'block';
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+
+            try {
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        knock: message,
+                        help_card: '' // Can be enhanced to capture help card from UI
+                    }),
+                });
+
+                const data = await response.json();
+                
+                // Hide typing indicator
+                typingIndicator.style.display = 'none';
+
+                // Add PIPPA's response
+                addMessage(data.response, false);
+
+                // Add resonance display if available
+                if (data.pippa_offering) {
+                    const resonanceDiv = document.createElement('div');
+                    resonanceDiv.className = 'resonance-display';
+                    resonanceDiv.textContent = `🌀 ${data.pippa_offering}`;
+                    chatContainer.appendChild(resonanceDiv);
+                }
+
+            } catch (error) {
+                typingIndicator.style.display = 'none';
+                addMessage("Sorry, I'm having trouble connecting right now. Please try again!", false);
+            }
+        }
+
+        sendButton.addEventListener('click', sendMessage);
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Focus input on load
+        messageInput.focus();
+    </script>
+</body>
+</html>
